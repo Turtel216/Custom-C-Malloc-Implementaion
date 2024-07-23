@@ -1,9 +1,15 @@
 #include "lock.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
 
-typedef enum e_heap_group { TINY, SMALL, LARGE } t_heap_group;
+#define H_CAPACITY 640000
 
+char heap[H_CAPACITY] = { 0 };
+size_t heap_size = 0;
+//typedef enum e_heap_group { TINY, SMALL, LARGE } t_heap_group;
+
+/*
 typedef struct s_heap {
 	struct s_heap *prev;
 	struct s_heap *next;
@@ -19,14 +25,17 @@ typedef struct s_block {
 	size_t size;
 	bool freed;
 } t_block;
+*/
 
 // Allocate size bytes of uninitialized storage (melloc)
 void *lock(size_t size)
 {
-	if (size <= 0)
-		return NULL;
+	assert(heap_size + size <= H_CAPACITY);
 
-	return NULL;
+	void *result = heap + heap_size;
+	heap_size += size;
+
+	return result;
 }
 
 // Allocates memory for an array of num objects of size and initializes all
