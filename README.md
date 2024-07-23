@@ -1,2 +1,2 @@
-# Custom-C-Malloc-Implementaion
+# Custom-C-Malloc-Implementation
 An implementation of the malloc function in the C programming Language
