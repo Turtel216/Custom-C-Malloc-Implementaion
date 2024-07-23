@@ -1,3 +1,4 @@
+#include "./lock.h"
 #include <stdio.h>
 #define EXIT_SUCCESS 0
 
