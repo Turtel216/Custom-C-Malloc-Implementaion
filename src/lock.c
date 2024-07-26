@@ -109,6 +109,8 @@ void *relock(void *ptr, size_t size)
 // bytes in the allocated storage to zero.
 void *clock(size_t count, size_t size)
 {
-	//TODO
-	return NULL;
+	size_t sum = count * size; // TODO check for overflow.
+	void *ptr = lock(sum);
+	memset(ptr, 0, sum);
+	return ptr;
 }
