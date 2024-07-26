@@ -11,6 +11,22 @@ typedef struct Chunk {
 	int temp_debug; // TODO remove after debugging
 } Chunk;
 
+#define CHUNK_SIZE sizeof(Chunk)
+
+void *head = NULL; // Link list head
+
+// Find available memory in the heap
+Chunk *find_free_chunk(Chunk **last, size_t size)
+{
+	Chunk *current = head;
+	while (current && !(current->freed && current->size >= size)) {
+		*last = current;
+		current = current->next;
+	}
+
+	return current;
+}
+
 // Allocate size bytes of uninitialized storage (melloc)
 void *lock(size_t size)
 {
