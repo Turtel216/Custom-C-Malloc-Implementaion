@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 // Linked list node
 typedef struct Chunk {
@@ -25,6 +26,27 @@ Chunk *find_free_chunk(Chunk **last, size_t size)
 	}
 
 	return current;
+}
+
+Chunk *request_space(Chunk *last, size_t size)
+{
+	Chunk *chunk;
+	chunk = sbrk(0);
+	void *request = sbrk(size + CHUNK_SIZE);
+
+	assert((void *)chunk == request);
+	if (request == (void *)-1) {
+		return NULL; // sbrk failed.
+	}
+
+	if (last) { // NULL on first request.
+		last->next = chunk;
+	}
+	chunk->size = size;
+	chunk->next = NULL;
+	chunk->freed = false;
+	chunk->temp_debug = 0x12345678;
+	return chunk;
 }
 
 // Allocate size bytes of uninitialized storage (melloc)
