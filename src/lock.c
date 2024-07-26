@@ -4,8 +4,7 @@
 #include <stdbool.h>
 
 #define HEAP_CAPACITY 640000
-#define GROUP_CAPACITY 1024
-#define FREED_CAPACITY 1024
+#define CHUNK_CAPACITY 1024
 
 typedef struct {
 	void *start;
@@ -14,7 +13,7 @@ typedef struct {
 
 typedef struct {
 	size_t count;
-	Heap_Chunk chunks[HEAP_CAPACITY];
+	Heap_Chunk chunks[CHUNK_CAPACITY];
 } Chunk_List;
 
 int chunk_list_find(Chunk_List *list, void *ptr)
@@ -23,9 +22,23 @@ int chunk_list_find(Chunk_List *list, void *ptr)
 	return -1;
 }
 
-void chunk_list_insert(Chunk_List *list, void *ptr)
+// Insert new node to list
+void chunk_list_insert(Chunk_List *list, void *ptr, size_t size)
 {
-	//TODO
+	assert(list->count < CHUNK_CAPACITY);
+
+	list->chunks[list->count].start = ptr;
+	list->chunks[list->count].size = size;
+
+	for (size_t i = list->count;
+	     i > 0 && list->chunks[i].start < list->chunks[i - 1].start; --i) {
+		// Swap the current with previous chunk
+		const Heap_Chunk t_chunk = list->chunks[i];
+		list->chunks[i] = list->chunks[i - 1];
+		list->chunks[i - 1] = t_chunk;
+	}
+
+	list->count += 1;
 }
 
 void chunk_list_remove(Chunk_List *list, size_t index)
@@ -73,7 +86,7 @@ void *lock(size_t size)
 		void *result = heap + heap_size;
 		heap_size += size;
 
-		chunk_list_insert(&alloced_chunks, result);
+		chunk_list_insert(&alloced_chunks, result, size);
 
 		return result;
 	}
@@ -81,22 +94,16 @@ void *lock(size_t size)
 	return NULL;
 }
 
-/*
-void dumb_chunks(void) {
-  for (size_t i = 0; i < chunk_size; ++i) {
-
-  }
-}
-*/
-
 // Deallocates the space previously allocated (free)
 void za_hando(void *ptr)
 {
+	//TODO
 }
 
 // Allocates memory for an array of num objects of size and initializes all
 // bytes in the allocated storage to zero.
 void *clock(size_t count, size_t size)
 {
+	//TODO
 	return NULL;
 }
