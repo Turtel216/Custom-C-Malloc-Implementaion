@@ -49,6 +49,11 @@ Chunk *request_space(Chunk *last, size_t size)
 	return chunk;
 }
 
+Chunk *get_block_ptr(void *ptr)
+{
+	return (Chunk *)ptr - 1;
+}
+
 // Allocate size bytes of uninitialized storage (melloc)
 void *lock(size_t size)
 {
@@ -59,7 +64,18 @@ void *lock(size_t size)
 // Deallocates the space previously allocated (free)
 void za_hando(void *ptr)
 {
-	//TODO
+	if (!ptr) {
+		return;
+	}
+
+	// TODO merge chunks once splitting chunks is implemented.
+	Chunk *chunk_ptr = get_block_ptr(ptr);
+	assert(chunk_ptr->freed == false);
+	assert(chunk_ptr->temp_debug == 0x77777777 ||
+	       chunk_ptr->temp_debug == 0x12345678);
+
+	chunk_ptr->freed = true;
+	chunk_ptr->temp_debug = 0x55555555;
 }
 
 // Allocates memory for an array of num objects of size and initializes all
