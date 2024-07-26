@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <string.h>
 
 // Linked list node
 typedef struct Chunk {
@@ -76,6 +77,32 @@ void za_hando(void *ptr)
 
 	chunk_ptr->freed = true;
 	chunk_ptr->temp_debug = 0x55555555;
+}
+
+// Reallocates the given area of memory.
+void *relock(void *ptr, size_t size)
+{
+	if (!ptr) {
+		// NULL ptr. relock should act like lock.
+		return lock(size);
+	}
+
+	Chunk *chunk = get_block_ptr(ptr);
+	if (chunk->size >= size) {
+		// TODO free some space once we implement split.
+		return ptr;
+	}
+
+	// Lalloc new space and free old space.
+	// Then copy old data to new space.
+	void *new_ptr;
+	new_ptr = lock(size);
+	if (!new_ptr) {
+		return NULL; // TODO: set errno on failure.
+	}
+	memcpy(new_ptr, ptr, chunk->size);
+	za_hando(ptr);
+	return new_ptr;
 }
 
 // Allocates memory for an array of num objects of size and initializes all
