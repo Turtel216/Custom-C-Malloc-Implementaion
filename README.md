@@ -1,5 +1,5 @@
 # Custom-C-Malloc-Implementation
-An implementation of the malloc function in the C programming Language. This project was made to gain a better understanding of the C programming language and memory management
+An implementation of the malloc library in the C programming Language. This project was made to gain a better understanding of the C programming language and memory management
 
 ## Usage
 
