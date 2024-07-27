@@ -58,8 +58,35 @@ Chunk *get_block_ptr(void *ptr)
 // Allocate size bytes of uninitialized storage (melloc)
 void *lock(size_t size)
 {
-	//TODO
-	return NULL;
+	Chunk *chunk;
+	// TODO: align size
+
+	if (size <= 0) {
+		return NULL;
+	}
+
+	if (!head) { // First call.
+		chunk = request_space(NULL, size);
+		if (!chunk) {
+			return NULL;
+		}
+		head = chunk;
+	} else {
+		Chunk *last = head;
+		chunk = find_free_chunk(&last, size);
+		if (!chunk) { // Failed to find free block.
+			chunk = request_space(last, size);
+			if (!chunk) {
+				return NULL;
+			}
+		} else { // Found free block
+			// TODO: split block here.
+			chunk->freed = false;
+			chunk->temp_debug = 0x77777777;
+		}
+	}
+
+	return (chunk + 1);
 }
 
 // Deallocates the space previously allocated (free)

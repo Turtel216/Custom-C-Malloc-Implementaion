@@ -17,14 +17,14 @@ void *lock(size_t size);
 void ze_hando(void *ptr);
 ```
 
-- To Allocate memory for an array of num objects of size and initializes all bytes in the allocated storage to zero (realloc)
+- To Allocate memory for an array of num objects of size and initializes all bytes in the allocated storage to zero (calloc)
 
 ```c 
 void *clock(size_t count, size_t size);
 ```
 
-- Reallocates the given area of memory(calloc)
+- To reallocate the given area of memory(realloc)
 
 ```c 
-void relock(void *ptr, size_t size);
+void *relock(void *ptr, size_t size);
 ```
