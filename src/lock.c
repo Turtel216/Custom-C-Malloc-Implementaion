@@ -60,9 +60,11 @@ Chunk *get_block_ptr(void *ptr)
 // Merge fragmented chunks
 void merge_freed_chunks(Chunk *chunk)
 {
+	assert(chunk->freed);
+
 	if (chunk->prev->freed && chunk->next->freed) {
 		chunk->prev->next = chunk->next;
-	} else if (chunk->prev->freed && !(chunk->next->freed)) {
+	} else if (chunk->prev->freed) {
 		chunk->prev->next = chunk;
 	} else if (chunk->next->freed) {
 		chunk->next = chunk->next->next;
@@ -110,7 +112,6 @@ void za_hando(void *ptr)
 		return;
 	}
 
-	// TODO merge chunks once splitting chunks is implemented(test merge_freed_chunks)
 	Chunk *chunk_ptr = get_block_ptr(ptr);
 	assert(chunk_ptr->freed == false);
 	assert(chunk_ptr->temp_debug == 0x77777777 ||
@@ -118,6 +119,9 @@ void za_hando(void *ptr)
 
 	chunk_ptr->freed = true;
 	chunk_ptr->temp_debug = 0x55555555;
+
+	// Merge chunks here
+	merge_freed_chunks(chunk_ptr);
 }
 
 // Reallocates the given area of memory.
