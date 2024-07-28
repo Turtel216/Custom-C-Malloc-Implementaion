@@ -9,6 +9,7 @@
 typedef struct Chunk {
 	size_t size;
 	struct Chunk *next; // pointer to next node
+	struct Chunk *prev; // pointer to prev node
 	bool freed; // keeps track of freed chunks
 	int temp_debug; // TODO remove after debugging
 } Chunk;
@@ -42,6 +43,7 @@ Chunk *request_space(Chunk *last, size_t size)
 
 	if (last) { // NULL on first request.
 		last->next = chunk;
+		chunk->prev = last;
 	}
 	chunk->size = size;
 	chunk->next = NULL;
@@ -53,6 +55,18 @@ Chunk *request_space(Chunk *last, size_t size)
 Chunk *get_block_ptr(void *ptr)
 {
 	return (Chunk *)ptr - 1;
+}
+
+// Merge fragmented chunks
+void merge_freed_chunks(Chunk *chunk)
+{
+	if (chunk->prev->freed && chunk->next->freed) {
+		chunk->prev->next = chunk->next;
+	} else if (chunk->prev->freed && !(chunk->next->freed)) {
+		chunk->prev->next = chunk;
+	} else if (chunk->next->freed) {
+		chunk->next = chunk->next->next;
+	}
 }
 
 // Allocate size bytes of uninitialized storage (melloc)
@@ -96,7 +110,7 @@ void za_hando(void *ptr)
 		return;
 	}
 
-	// TODO merge chunks once splitting chunks is implemented.
+	// TODO merge chunks once splitting chunks is implemented(test merge_freed_chunks)
 	Chunk *chunk_ptr = get_block_ptr(ptr);
 	assert(chunk_ptr->freed == false);
 	assert(chunk_ptr->temp_debug == 0x77777777 ||
@@ -120,7 +134,7 @@ void *relock(void *ptr, size_t size)
 		return ptr;
 	}
 
-	// Lalloc new space and free old space.
+	// allocate new space and free old space.
 	// Then copy old data to new space.
 	void *new_ptr;
 	new_ptr = lock(size);
