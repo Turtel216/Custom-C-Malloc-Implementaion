@@ -61,16 +61,15 @@ void merge_freed_chunks(Chunk *chunk)
 {
 	assert(chunk->freed);
 
-	if (chunk == head)
-		return;
-
-	if (chunk->prev->freed && chunk->next->freed) {
-		chunk->prev->next = chunk->next;
-		return;
-	} else if (chunk->prev->freed) {
+	if (chunk->prev != NULL && chunk->next != NULL) {
+		if (chunk->prev->freed && chunk->next->freed) {
+			chunk->prev->next = chunk->next;
+			return;
+		}
+	} else if (chunk->prev != NULL && chunk->prev->freed) {
 		chunk->prev->next = chunk;
 		return;
-	} else if (chunk->next->freed) {
+	} else if (chunk->next != NULL && chunk->next->freed) {
 		chunk->next = chunk->next->next;
 		return;
 	}
@@ -125,8 +124,8 @@ void za_hando(void *ptr)
 	chunk_ptr->freed = true;
 	chunk_ptr->temp_debug = 0x55555555;
 
-	// Merge chunks here
-	//merge_freed_chunks(chunk_ptr);
+	// Merge chunks freed chunks
+	merge_freed_chunks(chunk_ptr);
 }
 
 // Reallocates the given area of memory.
@@ -139,7 +138,7 @@ void *relock(void *ptr, size_t size)
 
 	Chunk *chunk = get_block_ptr(ptr);
 	if (chunk->size >= size) {
-		// TODO free some space once we implement split.
+		// TODO free some space once split.
 		return ptr;
 	}
 
