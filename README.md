@@ -1,5 +1,5 @@
 # Custom-C-Malloc-Implementation
-An implementation of the malloc library in the C programming Language. This project was made to gain a better understanding of the C programming language and memory management
+An implementation of the malloc library in the C programming Language. This project was made to gain a better understanding of the C programming language and memory management. The Heap memory is implemented as a linked-list and merges fragmented chunks of memory
 
 ## Usage
 
