@@ -14,7 +14,7 @@ void *lock(size_t size);
 - To Deallocates the space previously allocated (free)
 
 ```c 
-void ze_hando(void *ptr);
+void za_hando(void *ptr);
 ```
 
 - To Allocate memory for an array of num objects of size and initializes all bytes in the allocated storage to zero (calloc)
