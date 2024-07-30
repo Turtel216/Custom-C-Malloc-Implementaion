@@ -27,7 +27,6 @@ int main()
 
 	*ptr3 = 3;
 	*ptr3 = 300;
-	printf("HEY FROM LINE %d\n", __LINE__);
 
 	za_hando(ptr3);
 

@@ -1,6 +1,5 @@
 #include "lock.h"
 #include <assert.h>
-#include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
@@ -75,7 +74,6 @@ void merge_freed_chunks(Chunk *chunk)
 		chunk->next = chunk->next->next;
 		return;
 	}
-	printf("Reached merge\n");
 }
 
 // Allocate size bytes of uninitialized storage (melloc)
