@@ -62,13 +62,20 @@ void merge_freed_chunks(Chunk *chunk)
 {
 	assert(chunk->freed);
 
+	if (chunk == head)
+		return;
+
 	if (chunk->prev->freed && chunk->next->freed) {
 		chunk->prev->next = chunk->next;
+		return;
 	} else if (chunk->prev->freed) {
 		chunk->prev->next = chunk;
+		return;
 	} else if (chunk->next->freed) {
 		chunk->next = chunk->next->next;
+		return;
 	}
+	printf("Reached merge\n");
 }
 
 // Allocate size bytes of uninitialized storage (melloc)
@@ -121,7 +128,7 @@ void za_hando(void *ptr)
 	chunk_ptr->temp_debug = 0x55555555;
 
 	// Merge chunks here
-	merge_freed_chunks(chunk_ptr);
+	//merge_freed_chunks(chunk_ptr);
 }
 
 // Reallocates the given area of memory.
