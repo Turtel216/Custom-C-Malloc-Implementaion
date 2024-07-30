@@ -34,6 +34,6 @@ int main()
 	}
 
 	za_hando(arr);
-	printf("Passed test-1");
+	printf("Passed test-1\n");
 	return 0;
 }

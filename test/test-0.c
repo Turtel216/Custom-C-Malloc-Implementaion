@@ -29,7 +29,7 @@ int main()
 	*ptr3 = 300;
 
 	za_hando(ptr3);
-	printf("Passed test-0");
+	printf("Passed test-0\n");
 
 	return 0;
 }
