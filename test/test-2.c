@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include "../src/lock.h"
 
 #define TOTAL_ALLOCS 200000
@@ -13,10 +14,7 @@ int main()
 
 	for (i = 0; i < TOTAL_ALLOCS; i++) {
 		ptr = lock(ALLOC_SIZE);
-		if (ptr == NULL) {
-			printf("Memory failed to allocate!\n");
-			return 1;
-		}
+		assert(ptr != NULL && "Memory failed to allocate!\n");
 
 		za_hando(ptr);
 	}
