@@ -8,7 +8,7 @@
 #define CHANCE_OF_REALLOC 50
 #define TOTAL_ALLOCS 100000
 
-int main()
+int main(void)
 {
 	lock(1);
 

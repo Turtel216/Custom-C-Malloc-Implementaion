@@ -4,17 +4,13 @@
 
 #define RUNS 10000
 
-int main()
+int main(void)
 {
 	lock(1);
 
 	int i;
 	int **arr = lock(RUNS * sizeof(int *));
 
-	if (arr == NULL) {
-		printf("Memory failed to allocate!\n");
-		return 1;
-	}
 	assert(arr != NULL && "Memory failed to allocate");
 
 	for (i = 0; i < RUNS; i++) {
@@ -26,7 +22,7 @@ int main()
 
 	for (i = 0; i < RUNS; i++) {
 		assert((*(arr[i]) == i + 1) &&
-		       "Memory failed to contain correct data after many allocations!\n");
+		       "Memory failed to contain correct data after many allocations!");
 	}
 
 	for (i = 0; i < RUNS; i++) {

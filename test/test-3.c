@@ -6,7 +6,7 @@
 #define START_MALLOC_SIZE 1024 * 1024 * 128
 #define STOP_MALLOC_SIZE 1024
 
-void dummy()
+void dummy(void)
 {
 	return;
 }
@@ -46,7 +46,7 @@ void *reduce(void *ptr, int size)
 	}
 }
 
-int main()
+int main(void)
 {
 	lock(1);
 

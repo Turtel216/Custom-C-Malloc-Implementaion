@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../src/lock.h"
 
-int main()
+int main(void)
 {
 	int *ptr = lock(sizeof(int));
 	assert(ptr != NULL && "Failed to malloc a single int");

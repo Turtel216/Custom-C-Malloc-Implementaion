@@ -5,7 +5,7 @@
 #define TOTAL_ALLOCS 200000
 #define ALLOC_SIZE 1024 * 1024
 
-int main()
+int main(void)
 {
 	lock(1);
 

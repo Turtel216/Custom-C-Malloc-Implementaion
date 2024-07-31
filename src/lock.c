@@ -1,5 +1,6 @@
 #include "lock.h"
 #include <assert.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
@@ -147,7 +148,8 @@ void *relock(void *ptr, size_t size)
 	void *new_ptr;
 	new_ptr = lock(size);
 	if (!new_ptr) {
-		return NULL; // TODO: set errno on failure.
+		errno = ECANCELED;
+		return NULL;
 	}
 	memcpy(new_ptr, ptr, chunk->size);
 	za_hando(ptr);
