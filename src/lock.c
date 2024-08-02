@@ -19,7 +19,7 @@ typedef struct Chunk {
 void *head = NULL; // Link list head
 
 // Find available memory in the heap
-Chunk *find_free_chunk(Chunk **last, size_t size)
+static Chunk *find_free_chunk(Chunk **last, size_t size)
 {
 	Chunk *current = head;
 	while (current && !(current->freed && current->size >= size)) {
@@ -30,7 +30,7 @@ Chunk *find_free_chunk(Chunk **last, size_t size)
 	return current;
 }
 
-Chunk *request_space(Chunk *last, size_t size)
+static Chunk *request_space(Chunk *last, size_t size)
 {
 	Chunk *chunk;
 	chunk = sbrk(0);
@@ -52,13 +52,13 @@ Chunk *request_space(Chunk *last, size_t size)
 	return chunk;
 }
 
-Chunk *get_block_ptr(void *ptr)
+static Chunk *get_block_ptr(void *ptr)
 {
 	return (Chunk *)ptr - 1;
 }
 
 // Merge fragmented chunks
-void merge_freed_chunks(Chunk *chunk)
+static void merge_freed_chunks(Chunk *chunk)
 {
 	assert(chunk->freed);
 
